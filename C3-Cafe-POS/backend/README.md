@@ -1,0 +1,115 @@
+# C³ Cafe POS - Backend Foundation
+
+FastAPI backend application for the C³ Cafe POS System.
+
+---
+
+## Architecture
+
+```
+backend/
+├── app/
+│   ├── api/          # API Routers
+│   ├── core/         # Core utilities (logging, security, etc.)
+│   ├── database/     # Database session & engine configuration
+│   ├── models/       # SQLAlchemy models
+│   ├── schemas/      # Pydantic schemas
+│   ├── services/     # Business logic
+│   ├── utils/        # General utilities
+│   ├── config.py     # Configuration management (pydantic-settings)
+│   ├── dependencies.py # API dependencies
+│   └── main.py       # FastAPI application entry point
+├── logs/             # Application logs
+├── tests/            # Automated test suite
+├── .env              # Environment variables
+├── .gitignore        # Git ignore rules
+├── README.md         # Backend documentation
+└── requirements.txt  # Python package dependencies
+```
+
+---
+
+## Setup & Virtual Environment
+
+1. **Navigate to the backend directory**:
+   ```bash
+   cd backend
+   ```
+
+2. **Create a Python virtual environment**:
+   ```bash
+   python -m venv venv
+   ```
+
+3. **Activate the virtual environment**:
+   - **Windows (PowerShell)**:
+     ```powershell
+     .\venv\Scripts\Activate.ps1
+     ```
+   - **Windows (CMD)**:
+     ```cmd
+     .\venv\Scripts\activate.bat
+     ```
+   - **Linux / macOS**:
+     ```bash
+     source venv/bin/activate
+     ```
+
+4. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+---
+
+## Configuration
+
+Environment variables are defined in `.env`:
+
+```env
+APP_NAME=C3 Cafe POS
+APP_VERSION=1.0.0
+DEBUG=True
+DATABASE_URL=sqlite:///./database/c3_pos.db
+```
+
+---
+
+## Running the Application
+
+### Development Server (Uvicorn)
+
+Run Uvicorn directly from the `backend` directory:
+
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+
+Or run using python:
+
+```bash
+python main.py
+```
+
+### Endpoints & Interactive Documentation
+
+- **Root**: [http://localhost:8000/](http://localhost:8000/)
+- **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+---
+
+## Running Tests
+
+Run pytest from the `backend` directory:
+
+```bash
+pytest
+```
+
+Or run pytest with verbose output:
+
+```bash
+pytest -v
+```

@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment
+.env
+.venv/
+venv/
+ENV/
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+logs/*.log
+!logs/.gitkeep
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
