@@ -133,9 +133,10 @@ export default function BillingPage() {
         <div className="relative mb-3 shrink-0">
           <input
             type="text"
+            data-shortcut="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search active menu items or tap items to add..."
+            placeholder="Search active menu items... (Ctrl+F)"
             className="w-full h-11 pl-10 pr-4 rounded-xl border border-stone-300 bg-stone-50/60 text-cafe-dark text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-coffee-brown transition"
           />
           <span className="absolute left-3.5 top-2.5 text-stone-400 font-bold text-base">🔍</span>

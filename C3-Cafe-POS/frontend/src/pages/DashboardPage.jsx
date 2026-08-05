@@ -1,45 +1,109 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import useDashboardStore from '../store/dashboardStore';
+
+import DashboardFilterBar from '../features/dashboard/DashboardFilterBar';
+import SummaryCards from '../features/dashboard/SummaryCards';
+import HourlySalesChart from '../features/dashboard/HourlySalesChart';
+import PaymentBreakdownWidget from '../features/dashboard/PaymentBreakdownWidget';
+import TopProductsWidget from '../features/dashboard/TopProductsWidget';
+import RecentTransactionsWidget from '../features/dashboard/RecentTransactionsWidget';
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
+  const navigate = useNavigate();
+  const {
+    summary,
+    paymentSummary,
+    topProducts,
+    hourlySales,
+    recentTransactions,
+    autoRefresh,
+    isLoading,
+    error,
+    fetchDashboardData,
+    clearError,
+  } = useDashboardStore();
+
+  // CASHIER Role restriction: Redirect cashiers to Billing page
+  if (user && user.role === 'CASHIER') {
+    return <Navigate to="/billing" replace />;
+  }
+
+  // Initial fetch on mount
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  // Auto-refresh interval (30 seconds)
+  useEffect(() => {
+    if (!autoRefresh) return;
+
+    const interval = setInterval(() => {
+      fetchDashboardData();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [autoRefresh]);
 
   return (
     <div className="space-y-6">
-      {/* Welcome Banner */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 flex justify-between items-center">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 select-none">
         <div>
-          <h1 className="text-2xl font-bold text-coffee-brown">
-            Welcome, {user?.full_name || 'Staff'}!
-          </h1>
-          <p className="text-sm text-stone-600 mt-1">
-            System ready for C³ Cafe operations. Authenticated as{' '}
-            <span className="font-semibold text-stone-800">{user?.role}</span>.
-          </p>
+          <h1 className="text-2xl font-bold text-coffee-brown">Business Performance Dashboard</h1>
+          <p className="text-xs text-stone-600">Real-time cafe sales, order metrics, and payment analytics</p>
         </div>
-
-        <div className="px-4 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold uppercase tracking-wider">
-          {user?.role}
+        <div className="flex items-center space-x-3 self-start sm:self-auto">
+          <button
+            onClick={() => navigate('/backup')}
+            className="h-10 px-4 rounded-xl border border-stone-300 bg-white hover:bg-stone-50 text-stone-700 font-bold text-xs shadow-xs transition flex items-center space-x-1.5"
+          >
+            <span>🛡️</span>
+            <span>Quick Backup</span>
+          </button>
+          <button
+            onClick={() => navigate('/reports')}
+            className="h-10 px-5 rounded-xl bg-coffee-brown hover:bg-amber-900 active:scale-95 text-white font-bold text-xs shadow-xs transition flex items-center space-x-2"
+          >
+            <span>📊</span>
+            <span>Open Reports & BI</span>
+            <span>&rarr;</span>
+          </button>
         </div>
       </div>
 
-      {/* Dashboard Placeholder Card */}
-      <div className="bg-white rounded-2xl p-12 shadow-sm border border-stone-200 text-center max-w-2xl mx-auto space-y-4">
-        <div className="w-16 h-16 rounded-2xl bg-amber-100/70 text-coffee-brown mx-auto flex items-center justify-center font-bold text-2xl border border-amber-200">
-          ☕
+      {/* Error Banner */}
+      {error && (
+        <div className="bg-rose-50 border border-rose-200 text-rose-800 text-sm rounded-xl p-4 flex justify-between items-center">
+          <span>{error}</span>
+          <button onClick={clearError} className="font-bold text-rose-900 leading-none">
+            &times;
+          </button>
         </div>
+      )}
 
-        <h2 className="text-xl font-bold text-cafe-dark">
-          Dashboard Coming Soon
-        </h2>
+      {/* Date Filter & Control Bar */}
+      <DashboardFilterBar />
 
-        <p className="text-sm text-stone-600 leading-relaxed max-w-md mx-auto">
-          The POS core infrastructure, authentication, and application shell are successfully configured. Business modules (Billing, Categories, Products, Reports) will be enabled in upcoming releases.
-        </p>
+      {/* Summary KPI Cards */}
+      <SummaryCards summary={summary} />
 
-        <div className="pt-4 text-xs font-mono text-stone-400 border-t border-stone-100">
-          C³ Cafe POS • Version 1.0
+      {/* Analytics Grid Row 1: Hourly Sales Chart & Payment Breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <HourlySalesChart hourlySales={hourlySales} />
         </div>
+        <div className="lg:col-span-1">
+          <PaymentBreakdownWidget paymentSummary={paymentSummary} />
+        </div>
+      </div>
+
+      {/* Analytics Grid Row 2: Top Products & Recent Transactions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TopProductsWidget topProducts={topProducts} />
+        <RecentTransactionsWidget recentTransactions={recentTransactions} />
       </div>
     </div>
   );

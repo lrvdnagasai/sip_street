@@ -10,9 +10,11 @@ export default function Sidebar() {
     { name: 'Categories', path: '/categories', enabled: true },
     { name: 'Products', path: '/products', enabled: true },
     { name: 'Billing', path: '/billing', enabled: true },
-    { name: 'Reports', path: '/reports', enabled: false },
-    { name: 'Expenses', path: '/expenses', enabled: false },
-    { name: 'Settings', path: '/settings', enabled: false },
+    { name: 'Receipts', path: '/receipts', enabled: true },
+    { name: 'Reports', path: '/reports', enabled: true },
+    { name: 'Expenses', path: '/expenses', enabled: true },
+    { name: 'Backup & Restore', path: '/backup', enabled: true },
+    { name: 'Settings', path: '/settings', enabled: true },
   ];
 
   return (

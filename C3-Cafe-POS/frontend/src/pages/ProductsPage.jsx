@@ -114,9 +114,10 @@ export default function ProductsPage() {
           <div className="relative sm:col-span-2 lg:col-span-2">
             <input
               type="text"
+              data-shortcut="search"
               value={filters.search}
               onChange={(e) => setFilter('search', e.target.value)}
-              placeholder="Search by name, SKU, or description..."
+              placeholder="Search by name, SKU, or description... (Ctrl+F)"
               className="w-full h-11 pl-10 pr-4 rounded-xl border border-stone-300 bg-stone-50/60 text-cafe-dark text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-coffee-brown transition"
             />
             <span className="absolute left-3.5 top-2.5 text-stone-400 font-bold text-base select-none">

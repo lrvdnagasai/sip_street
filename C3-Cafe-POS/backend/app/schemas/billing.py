@@ -47,6 +47,8 @@ class InvoiceResponse(BaseModel):
     amount_received: Decimal
     balance_amount: Decimal
     status: InvoiceStatus
+    print_count: int = 0
+    last_printed_at: Optional[datetime] = None
     created_at: datetime
     items: List[InvoiceItemResponse]
 

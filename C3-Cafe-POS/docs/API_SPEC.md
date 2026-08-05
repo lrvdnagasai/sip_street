@@ -123,94 +123,240 @@
 ### 1. List Terminal Products
 `GET /api/billing/products?category_id={int}&search={string}`
 
-*Requires active session (Admin or Cashier).*
-
-**Returns**: Active and available products only (`is_active=True`, `is_available=True`, `category.is_active=True`).
-
-**Response (200 OK)**
-```json
-[
-  {
-    "id": 1,
-    "category_id": 1,
-    "category_name": "Beverages",
-    "sku": "PRD000001",
-    "name": "Masala Chai",
-    "description": "Hot brewed Indian tea with spices",
-    "price": "25.00",
-    "display_order": 0,
-    "product_type": "BEVERAGE",
-    "image_path": null,
-    "is_available": true,
-    "is_active": true,
-    "created_at": "2026-08-05T15:00:00Z",
-    "updated_at": "2026-08-05T15:00:00Z"
-  }
-]
-```
-
 ---
 
 ### 2. Create Invoice
 `POST /api/billing/invoice`
-
-*Requires active session.*
-
-**Request Body**
-```json
-{
-  "items": [
-    {
-      "product_id": 1,
-      "quantity": 2
-    }
-  ],
-  "payment_mode": "CASH",
-  "amount_received": 100.00,
-  "customer_name": "John Doe"
-}
-```
-
-**Response (201 Created)**
-```json
-{
-  "id": 1,
-  "invoice_number": "INV000001",
-  "cashier_id": 2,
-  "cashier_name": "Default Cashier",
-  "customer_name": "John Doe",
-  "payment_mode": "CASH",
-  "subtotal": "50.00",
-  "grand_total": "50.00",
-  "amount_received": "100.00",
-  "balance_amount": "50.00",
-  "status": "COMPLETED",
-  "created_at": "2026-08-05T15:20:00Z",
-  "items": [
-    {
-      "id": 1,
-      "invoice_id": 1,
-      "product_id": 1,
-      "product_name": "Masala Chai",
-      "unit_price": "25.00",
-      "quantity": 2,
-      "line_total": "50.00",
-      "created_at": "2026-08-05T15:20:00Z"
-    }
-  ]
-}
-```
 
 ---
 
 ### 3. Get Invoice Details
 `GET /api/billing/invoices/{id}`
 
-*Requires active session.*
-
 ---
 
 ### 4. Get Invoice History
 `GET /api/billing/history?limit={int}`
 
-*Requires active session.*
+---
+
+## Receipt Generation & Printing APIs
+
+### 1. Get Receipt Data by Invoice ID
+`GET /api/receipts/{invoice_id}`
+
+---
+
+### 2. Get Receipt Data by Invoice Number
+`GET /api/receipts/by-number/{invoice_number}`
+
+---
+
+### 3. Record Receipt Print Audit
+`PATCH /api/receipts/{invoice_id}/printed`
+
+---
+
+## Expense Management APIs
+
+### 1. List Expenses
+`GET /api/expenses?category={enum}&payment_mode={enum}&search={string}&include_inactive={boolean}&start_date={string}&end_date={string}`
+
+---
+
+### 2. Get Expense Summary Metrics
+`GET /api/expenses/summary`
+
+---
+
+### 3. Get Expense Details
+`GET /api/expenses/{id}`
+
+---
+
+### 4. Create Expense
+`POST /api/expenses`
+
+---
+
+### 5. Update Expense
+`PUT /api/expenses/{id}`
+
+---
+
+### 6. Soft Disable Expense
+`PATCH /api/expenses/{id}/disable`
+
+---
+
+### 7. Re-enable Expense
+`PATCH /api/expenses/{id}/enable`
+
+---
+
+## Business Performance Dashboard APIs
+
+### 1. Summary Cards Metrics
+`GET /api/dashboard/summary?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 2. Payment Method Breakdown
+`GET /api/dashboard/payment-summary?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 3. Top Selling Products
+`GET /api/dashboard/top-products?filter_type={enum}&start_date={string}&end_date={string}&limit={int}`
+
+---
+
+### 4. Hourly Sales Distribution
+`GET /api/dashboard/hourly-sales?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 5. Recent Transactions Log
+`GET /api/dashboard/recent-transactions?limit={int}`
+
+---
+
+## Reports & Business Intelligence APIs
+
+### 1. Sales Report
+`GET /api/reports/sales?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 2. Expense Report
+`GET /api/reports/expenses?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 3. Net Profit Report
+`GET /api/reports/profit?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 4. Product Performance Report
+`GET /api/reports/products?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 5. Category Performance Report
+`GET /api/reports/categories?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 6. Cashier Performance Report
+`GET /api/reports/cashiers?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+### 7. Payment Method Report
+`GET /api/reports/payments?filter_type={enum}&start_date={string}&end_date={string}`
+
+---
+
+## Data Backup & Restore APIs
+
+### 1. Get Backup Storage Summary
+`GET /api/backup/summary`
+
+---
+
+### 2. Get Backup History List
+`GET /api/backup/history`
+
+---
+
+### 3. Create Database Backup
+`POST /api/backup/create`
+
+---
+
+### 4. Validate Backup Archive
+`POST /api/backup/validate?backup_name={string}`
+
+---
+
+### 5. Restore Database from Backup
+`POST /api/backup/restore`
+
+---
+
+### 6. Upload External Backup File
+`POST /api/backup/upload`
+
+---
+
+### 7. Download Backup Archive
+`GET /api/backup/download/{backup_name}`
+
+---
+
+### 8. Delete Backup File
+`DELETE /api/backup/{backup_name}`
+
+---
+
+## Application Settings APIs
+
+### 1. Get Application Settings
+`GET /api/settings`
+
+*Requires active authentication.*
+
+**Response (200 OK)**
+```json
+{
+  "id": 1,
+  "cafe_name": "C³ Cafe",
+  "owner_name": "Admin Owner",
+  "phone_number": "+91 9876543210",
+  "email": "contact@c3cafe.com",
+  "gst_number": null,
+  "address": "123 Coffee Street, Tech Hub, Bengaluru",
+  "logo_path": null,
+  "receipt_width": "80mm",
+  "receipt_footer": "Thank You! Visit Again",
+  "currency_symbol": "₹",
+  "show_print_count": false,
+  "default_backup_format": "ZIP",
+  "default_backup_location": "database/backups",
+  "auto_backup_on_exit": false,
+  "max_backup_count": 30,
+  "app_theme": "System",
+  "language": "English",
+  "timezone": "Asia/Kolkata",
+  "date_format": "DD/MM/YYYY",
+  "time_format": "12 Hour",
+  "opening_time": "08:00",
+  "closing_time": "22:00"
+}
+```
+
+---
+
+### 2. Update Application Settings
+`PUT /api/settings`
+
+*Requires Admin role (`ADMIN`).*
+
+**Request Body**
+```json
+{
+  "cafe_name": "Sip Street Cafe",
+  "phone_number": "+91 9999988888",
+  "receipt_width": "58mm",
+  "opening_time": "07:00",
+  "closing_time": "23:00"
+}
+```
+
+---
+
+### 3. Reset Settings to Factory Defaults
+`POST /api/settings/reset`
+
+*Requires Admin role (`ADMIN`). Restores all parameters to initial factory default values.*

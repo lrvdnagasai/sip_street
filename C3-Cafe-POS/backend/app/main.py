@@ -7,6 +7,12 @@ from app.api.auth import router as auth_router
 from app.api.category import router as category_router
 from app.api.product import router as product_router
 from app.api.billing import router as billing_router
+from app.api.receipt import router as receipt_router
+from app.api.dashboard import router as dashboard_router
+from app.api.expense import router as expense_router
+from app.api.report import router as report_router
+from app.api.backup import router as backup_router
+from app.api.settings import router as settings_router
 from app.config import settings
 from app.core.logging_config import logger
 from app.database import init_db, check_db_connection
@@ -54,6 +60,12 @@ app.include_router(auth_router)
 app.include_router(category_router)
 app.include_router(product_router)
 app.include_router(billing_router)
+app.include_router(receipt_router)
+app.include_router(dashboard_router)
+app.include_router(expense_router)
+app.include_router(report_router)
+app.include_router(backup_router)
+app.include_router(settings_router)
 
 
 @app.get("/")

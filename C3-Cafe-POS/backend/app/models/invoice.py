@@ -32,6 +32,8 @@ class Invoice(Base):
     amount_received = Column(Numeric(10, 2), nullable=False)
     balance_amount = Column(Numeric(10, 2), nullable=False)
     status = Column(Enum(InvoiceStatus), default=InvoiceStatus.COMPLETED, nullable=False)
+    print_count = Column(Integer, default=0, nullable=False)
+    last_printed_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
