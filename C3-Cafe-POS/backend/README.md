@@ -11,14 +11,21 @@ backend/
 ├── app/
 │   ├── api/          # API Routers
 │   ├── core/         # Core utilities (logging, security, etc.)
-│   ├── database/     # Database session & engine configuration
+│   ├── database/     # Database engine, session, Base & initialization
+│   │   ├── connection.py  # SQLAlchemy engine & DB connection health check
+│   │   ├── session.py     # SessionLocal factory
+│   │   ├── base.py        # DeclarativeBase class
+│   │   └── init_db.py     # Database schema startup initialization
 │   ├── models/       # SQLAlchemy models
 │   ├── schemas/      # Pydantic schemas
 │   ├── services/     # Business logic
 │   ├── utils/        # General utilities
 │   ├── config.py     # Configuration management (pydantic-settings)
-│   ├── dependencies.py # API dependencies
+│   ├── dependencies.py # API dependencies (get_db)
 │   └── main.py       # FastAPI application entry point
+├── migrations/       # Alembic database migrations environment
+├── alembic.ini       # Alembic configuration file
+├── database/         # Local SQLite database file location (c3_pos.db)
 ├── logs/             # Application logs
 ├── tests/            # Automated test suite
 ├── .env              # Environment variables
@@ -62,7 +69,7 @@ backend/
 
 ---
 
-## Configuration
+## Database & Configuration
 
 Environment variables are defined in `.env`:
 
@@ -72,6 +79,23 @@ APP_VERSION=1.0.0
 DEBUG=True
 DATABASE_URL=sqlite:///./database/c3_pos.db
 ```
+
+### Database Initialization
+- The application automatically initializes the SQLite database file at `backend/database/c3_pos.db` on application startup during the FastAPI lifespan event.
+- Database connectivity can be verified via the `/health` endpoint.
+
+### Alembic Migrations
+Alembic is configured for future schema changes:
+- `alembic.ini` points to SQLite at `database/c3_pos.db`.
+- `migrations/env.py` dynamically loads configuration and imports `Base.metadata`.
+- To create future migration revisions (when models are added):
+  ```bash
+  alembic revision --autogenerate -m "Migration description"
+  ```
+- To apply future migrations:
+  ```bash
+  alembic upgrade head
+  ```
 
 ---
 
@@ -95,6 +119,7 @@ python main.py
 
 - **Root**: [http://localhost:8000/](http://localhost:8000/)
 - **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
+  - Returns: `{"status": "Healthy", "database": "Connected"}`
 - **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
 - **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 

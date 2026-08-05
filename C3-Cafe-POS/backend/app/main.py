@@ -4,12 +4,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.core.logging_config import logger
+from app.database import init_db, check_db_connection
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifecycle events for FastAPI application."""
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
+    init_db()
     yield
     logger.info(f"Shutting down {settings.APP_NAME}")
 
@@ -48,9 +50,11 @@ def read_root():
 
 @app.get("/health")
 def read_health():
-    """Health check endpoint."""
+    """Health check endpoint verifying API status and database connection."""
+    db_status = "Connected" if check_db_connection() else "Disconnected"
     return {
         "status": "Healthy",
+        "database": db_status,
     }
 
 

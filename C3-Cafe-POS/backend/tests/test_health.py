@@ -3,11 +3,14 @@ from app.main import app
 
 
 def test_health_endpoint():
-    """Test the /health endpoint returns 200 OK and Healthy status."""
+    """Test the /health endpoint returns 200 OK, Healthy status, and database status."""
     with TestClient(app) as client:
         response = client.get("/health")
         assert response.status_code == 200
-        assert response.json() == {"status": "Healthy"}
+        assert response.json() == {
+            "status": "Healthy",
+            "database": "Connected",
+        }
 
 
 def test_root_endpoint():
