@@ -22,3 +22,11 @@ logs/*.log
 .pytest_cache/
 .coverage
 htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
