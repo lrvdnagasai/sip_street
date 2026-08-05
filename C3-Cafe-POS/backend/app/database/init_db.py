@@ -2,6 +2,8 @@ from sqlalchemy import text
 from app.core.logging_config import logger
 from app.database.base import Base
 from app.database.connection import engine, check_db_connection
+from app.database.seeder import seed_default_admin
+import app.models  # Ensure models are registered with Base metadata
 
 
 def init_db() -> None:
@@ -16,8 +18,10 @@ def init_db() -> None:
 
         if check_db_connection():
             logger.info("Database Connected")
+            seed_default_admin()
         else:
             logger.error("Failed to verify database connection after initialization")
     except Exception as e:
         logger.error(f"Error during database initialization: {e}")
         raise e
+

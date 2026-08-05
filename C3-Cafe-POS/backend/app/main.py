@@ -1,7 +1,12 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
+from app.api.auth import router as auth_router
+from app.api.category import router as category_router
+from app.api.product import router as product_router
+from app.api.billing import router as billing_router
 from app.config import settings
 from app.core.logging_config import logger
 from app.database import init_db, check_db_connection
@@ -24,6 +29,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Session middleware for authentication
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.SECRET_KEY,
+    same_site="lax",
+    https_only=False,
+)
+
 # CORS Configuration for development
 origins = [
     "http://localhost:5173",
@@ -36,6 +49,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_router)
+app.include_router(category_router)
+app.include_router(product_router)
+app.include_router(billing_router)
 
 
 @app.get("/")

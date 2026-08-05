@@ -11,6 +11,7 @@ from alembic import context
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from app.database.base import Base
+import app.models  # Import models so Base metadata is populated
 from app.database.connection import get_engine_url
 
 # this is the Alembic Config object, which provides

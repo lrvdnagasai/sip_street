@@ -6,3 +6,5 @@ python-dotenv
 alembic
 pytest
 httpx
+bcrypt
+itsdangerous
